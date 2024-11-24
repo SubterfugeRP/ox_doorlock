@@ -73,6 +73,7 @@ const DifficultyModal: React.FC<Props> = ({ selectData, setModal, modal }) => {
         />
         <NumberInput
           label="Area size"
+          // @ts-expect-error
           defaultValue={typeof lockpickData === 'object' ? lockpickData.areaSize : null}
           description="Skill check area size in degrees"
           disabled={select !== 'custom'}
@@ -85,6 +86,7 @@ const DifficultyModal: React.FC<Props> = ({ selectData, setModal, modal }) => {
           label="Speed multiplier"
           description="Number the indicator speed will be multiplied by"
           disabled={select !== 'custom'}
+          // @ts-expect-error
           defaultValue={typeof lockpickData === 'object' ? lockpickData.speedMultiplier : null}
           hideControls
           precision={2}

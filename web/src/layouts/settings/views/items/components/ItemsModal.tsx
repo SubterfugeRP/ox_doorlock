@@ -37,7 +37,9 @@ const ItemsModal: React.FC<Props> = ({ modal, setModal }) => {
   return (
     <form onSubmit={form.onSubmit((values) => handleSubmit(values))}>
       <Stack>
+        {/* @ts-expect-error*/}
         <TextInput label="Metadata type" defaultValue={itemData.metadata} {...form.getInputProps('metadata')} />
+        {/* @ts-expect-error*/}
         <Switch label="Remove on use" defaultChecked={itemData.remove} {...form.getInputProps('remove')} />
         <Button uppercase variant="light" type="submit">
           Confirm
