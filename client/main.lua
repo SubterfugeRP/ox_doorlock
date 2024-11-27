@@ -1,5 +1,6 @@
 if not LoadResourceFile(cache.resource, 'web/build/index.html') then
-	error('Unable to load UI. Build ox_doorlock or download the latest release.\n	^3https://github.com/overextended/ox_doorlock/releases/latest/download/ox_doorlock.zip^0')
+	error(
+	'Unable to load UI. Build ox_doorlock or download the latest release.\n	^3https://github.com/overextended/ox_doorlock/releases/latest/download/ox_doorlock.zip^0')
 end
 
 if not lib.checkDependency('ox_lib', '3.14.0', true) then return end
@@ -10,7 +11,8 @@ local function createDoor(door)
 
 	if double then
 		for i = 1, 2 do
-			AddDoorToSystem(double[i].hash, double[i].model, double[i].coords.x, double[i].coords.y, double[i].coords.z, false, false, false)
+			AddDoorToSystem(double[i].hash, double[i].model, double[i].coords.x, double[i].coords.y, double[i].coords.z,
+				false, false, false)
 			DoorSystemSetDoorState(double[i].hash, 4, false, false)
 			DoorSystemSetDoorState(double[i].hash, door.state, false, false)
 
@@ -51,7 +53,8 @@ lib.callback('ox_doorlock:getDoors', false, function(data)
 				if door.distance < 80 then
 					for i = 1, 2 do
 						if not double[i].entity and IsModelValid(double[i].model) then
-							local entity = GetClosestObjectOfType(double[i].coords.x, double[i].coords.y, double[i].coords.z, 1.0, double[i].model, false, false, false)
+							local entity = GetClosestObjectOfType(double[i].coords.x, double[i].coords.y,
+								double[i].coords.z, 1.0, double[i].model, false, false, false)
 
 							if entity ~= 0 then
 								double[i].entity = entity
@@ -70,7 +73,8 @@ lib.callback('ox_doorlock:getDoors', false, function(data)
 				end
 			elseif door.distance < 80 then
 				if not door.entity and IsModelValid(door.model) then
-					local entity = GetClosestObjectOfType(door.coords.x, door.coords.y, door.coords.z, 1.0, door.model, false, false, false)
+					local entity = GetClosestObjectOfType(door.coords.x, door.coords.y, door.coords.z, 1.0, door.model,
+						false, false, false)
 
 					if entity ~= 0 then
 						local min, max = GetModelDimensions(door.model)
@@ -165,10 +169,12 @@ RegisterNetEvent('ox_doorlock:setState', function(id, state, source, data)
 	if door.state == state and door.distance and door.distance < 20 then
 		if Config.NativeAudio then
 			RequestScriptAudioBank('dlc_oxdoorlock/oxdoorlock', false)
-			local sound = state == 0 and door.unlockSound or door.lockSound or 'door_bolt'
+			local sound = state == 0 and door.unlockSound or door.lockSound or false
+			if not sound then return end
 			local soundId = GetSoundId()
 
-			PlaySoundFromCoord(soundId, sound, door.coords.x, door.coords.y, door.coords.z, 'DLC_OXDOORLOCK_SET', false, 0, false)
+			PlaySoundFromCoord(soundId, sound, door.coords.x, door.coords.y, door.coords.z, 'DLC_OXDOORLOCK_SET', false,
+				0, false)
 			ReleaseSoundId(soundId)
 			ReleaseNamedScriptAudioBank('dlc_oxdoorlock/oxdoorlock')
 		else
@@ -320,13 +326,16 @@ CreateThread(function()
 
 						if sprite then
 							SetDrawOrigin(door.coords.x, door.coords.y, door.coords.z)
-							DrawSprite(sprite[1], sprite[2], sprite[3], sprite[4], sprite[5], sprite[6] * ratio, sprite[7], sprite[8], sprite[9], sprite[10], sprite[11])
+							DrawSprite(sprite[1], sprite[2], sprite[3], sprite[4], sprite[5], sprite[6] * ratio,
+								sprite[7], sprite[8], sprite[9], sprite[10], sprite[11])
 							ClearDrawOrigin()
 						end
 					end
 				end
 			end
-		else ClosestDoor = nil end
+		else
+			ClosestDoor = nil
+		end
 
 		if ClosestDoor and ClosestDoor.distance < ClosestDoor.maxDistance then
 			if Config.DrawTextUI and not ClosestDoor.hideUi and ClosestDoor.state ~= showUI then
