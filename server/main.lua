@@ -71,7 +71,7 @@ exports('getAllDoors', function()
 	local allDoors = {}
 
 	for _, door in pairs(doors) do
-		allDoors[#allDoors+1] = getDoor(door)
+		allDoors[#allDoors + 1] = getDoor(door)
 	end
 
 	return allDoors
@@ -297,6 +297,10 @@ local function setDoorState(id, state, lockpick)
 
 	return false
 end
+
+AddEventHandler("ox_doorlock:stateChanged", function(source, id, state, authorised)
+	MySQL.update('UPDATE ox_doorlock SET data = ? WHERE id = ?', { encodeData(doors[id]), id })
+end)
 
 RegisterNetEvent('ox_doorlock:setState', setDoorState)
 exports('setDoorState', setDoorState)
