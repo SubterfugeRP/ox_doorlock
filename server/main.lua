@@ -289,7 +289,7 @@ local function setDoorState(id, state, lockpick)
 			return true
 		end
 
-		if source then
+		if source and not door.hideUi then
 			lib.notify(source,
 				{ type = 'error', icon = 'lock', description = state == 0 and 'cannot_unlock' or 'cannot_lock' })
 		end
